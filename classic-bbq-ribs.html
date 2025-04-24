@@ -5,6 +5,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Classic BBQ Ribs Recipe</title>
+  <script>
+    const baseServings = 6;
+
+    const ingredients = {
+      ribs: { base: 2, unit: "racks of pork baby back ribs" },
+      brownSugar: { base: 0.25, unit: "cup brown sugar" },
+      paprika: { base: 1, unit: "tbsp smoked paprika" },
+      garlicPowder: { base: 1, unit: "tsp garlic powder" },
+      onionPowder: { base: 1, unit: "tsp onion powder" },
+      pepper: { base: 0.5, unit: "tsp black pepper" },
+      salt: { base: 0.5, unit: "tsp salt" },
+      bbqSauce: { base: 1, unit: "cup BBQ sauce" }
+    };
+
+    // Helper function to convert decimals to cooking-style fractions
+    function toFraction(amount) {
+      const fractions = [
+        { decimal: 0, text: "" },
+        { decimal: 1 / 8, text: "⅛" },
+        { decimal: 1 / 6, text: "⅙" },
+        { decimal: 1 / 5, text: "⅕" },
+        { decimal: 1 / 4, text: "¼" },
+        { decimal: 1 / 3, text: "⅓" },
+        { decimal: 3 / 8, text: "⅜" },
+        { decimal: 2 / 5, text: "⅖" },
+        { decimal: 1 / 2, text: "½" },
+        { decimal: 3 / 5, text: "⅗" },
+        { decimal: 5 / 8, text: "⅝" },
+        { decimal: 2 / 3, text: "⅔" },
+        { decimal: 3 / 4, text: "¾" },
+        { decimal: 4 / 5, text: "⅘" },
+        { decimal: 5 / 6, text: "⅚" },
+        { decimal: 7 / 8, text: "⅞" }
+      ];
+
+      let whole = Math.floor(amount);
+      let decimalPart = amount - whole;
+
+      let closest = fractions.reduce((prev, curr) =>
+        Math.abs(curr.decimal - decimalPart) < Math.abs(prev.decimal - decimalPart) ? curr : prev
+      );
+
+      let result = "";
+      if (whole > 0) result += whole;
+      if (closest.decimal > 0) result += (whole > 0 ? " " : "") + closest.text;
+
+      return result || "0";
+    }
+
+    function updateIngredients() {
+      const selectedServings = parseInt(document.getElementById("servings").value);
+
+      for (const key in ingredients) {
+        const item = ingredients[key];
+        const scaledAmount = item.base * selectedServings / baseServings;
+        const fractionAmount = toFraction(scaledAmount);
+        document.getElementById(key).textContent = `${fractionAmount} ${item.unit}`;
+      }
+       // ... existing code above ...
+
+  function resetServings() {
+    document.getElementById("servings").value = "6";
+    updateIngredients();
+  }
+
+  // Existing window.addEventListener...
+    }
+
+    window.addEventListener('DOMContentLoaded', updateIngredients);
+    
+  </script>
 </head>
 <body>
   <header>
@@ -13,16 +84,44 @@
   </header>
 
   <div class="container">
+    <h2>Cook Information</h2>
+    <ul>
+      <li>
+        Servings:
+        <select name="servings" id="servings" onchange="updateIngredients()">
+          <option value="2">2</option>
+          <option value="4">4</option>
+          <option value="6" selected>6</option>
+          <option value="8">8</option>
+          <option value="10">10</option>
+        </select>
+      </li>
+      <li>Prep Time:</li>
+      <li>Cook Time:</li>
+      <li>Total Time:</li>
+      <li>
+        Pellet Flavor:
+        <select name="pelletFlavor" id="pelletFlavor">
+          <option value="hickory">Hickory</option>
+          <option value="mesquite">Mesquite</option>
+          <option value="apple">Apple</option>
+          <option value="cherry">Cherry</option>
+          <option value="oak">Oak</option>
+          <option value="blend">Signature Blend</option>
+        </select>
+      </li>
+    </ul>
+
     <h2>Ingredients</h2>
     <ul>
-      <li>2 racks of pork baby back ribs</li>
-      <li>1/4 cup brown sugar</li>
-      <li>1 tbsp smoked paprika</li>
-      <li>1 tsp garlic powder</li>
-      <li>1 tsp onion powder</li>
-      <li>1/2 tsp black pepper</li>
-      <li>1/2 tsp salt</li>
-      <li>Your favorite BBQ sauce (about 1 cup)</li>
+      <li><input type="checkbox"><span id="ribs"></span></li>
+      <li><input type="checkbox"><span id="brownSugar"></span></li>
+      <li><input type="checkbox"><span id="paprika"></span></li>
+      <li><input type="checkbox"><span id="garlicPowder"></span></li>
+      <li><input type="checkbox"><span id="onionPowder"></span></li>
+      <li><input type="checkbox"><span id="pepper"></span></li>
+      <li><input type="checkbox"><span id="salt"></span></li>
+      <li><input type="checkbox"><span id="bbqSauce"></span></li>
     </ul>
 
     <h2>Instructions</h2>
